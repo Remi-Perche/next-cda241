@@ -16,9 +16,9 @@ jobs:
             **/node_modules
           key: node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Installe les dépendences
-        uses: npm install
+        run: npm install
       - name: Build l'application
-        uses: npm run build
+        run: npm run build
       - run: echo "Fin du build"
       - run: echo "${{ job.status }}"
   Test:
@@ -38,7 +38,7 @@ jobs:
             **/node_modules
           key: node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Installe les dépendences
-        uses: npm install
+        run: npm install
       - name: Upload la vidéo de test
         uses: actions/upload-artifact@v4
         with:

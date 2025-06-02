@@ -1,4 +1,4 @@
-name: CI
+name: CI Next.js
 run-name: Build d'une appli et cache
 on: [push]
 jobs:
@@ -44,3 +44,5 @@ jobs:
         with:
           name: test-video
           path: test-artifacts/test-video.mp4
+      - run: echo "Fin des tests"
+      - run: echo "${{ job.status }}"

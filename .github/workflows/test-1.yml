@@ -30,10 +30,8 @@ jobs:
           path: |
             **/node_modules
           key: node-modules-${{ hashFiles('**/package-lock.json') }}
-      - name: Install and Build
-        run: |
-          npm install
-          npm run build
-          ./packages/core/node_modules/cypress/bin/cypress install
-      - name: Run les tests
-        run: npm run e2e
+      - name: Run les tests (cypress)
+        uses: cypress-io/github-action@v6
+        with:
+          build: npm run build
+          start: npm start

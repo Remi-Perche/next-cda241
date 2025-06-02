@@ -1,0 +1,46 @@
+name: CI
+run-name: Build d'une appli et cache
+on: [push]
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Début du build"
+      - name: Récupère les dépendences
+        uses: actions/checkout@v4
+      - name: Mets en cache node_modules
+        id: cache-node-modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            **/node_modules
+          key: node-modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Installe les dépendences
+        uses: npm install
+      - name: Build l'application
+        uses: npm run build
+      - run: echo "Fin du build"
+      - run: echo "${{ job.status }}"
+  Test:
+    runs-on: ubuntu-latest
+    needs: Build
+    steps:
+      - run: echo "Début des tests"
+      - name: Run tests
+        run: |
+          mkdir -p test-artifacts
+          echo "Simulated test output" > test-artifacts/test-video.mp4
+          npm test
+      - name: Restore node_modules cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            **/node_modules
+          key: node-modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Installe les dépendences
+        uses: npm install
+      - name: Upload la vidéo de test
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-video
+          path: test-artifacts/test-video.mp4

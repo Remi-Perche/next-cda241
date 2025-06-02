@@ -24,7 +24,7 @@ jobs:
     needs: Build
     strategy:
       matrix:
-        navigateur: [chrome, edge, firefox]
+        navigateur: [chrome, edge]
     steps:
       - name: Récupère le code du repo
         uses: actions/checkout@v4

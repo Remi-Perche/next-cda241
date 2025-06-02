@@ -33,5 +33,6 @@ jobs:
       - name: Run les tests (cypress)
         uses: cypress-io/github-action@v6
         with:
+          install: false
           build: npm run build
           start: npm start

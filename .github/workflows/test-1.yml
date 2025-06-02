@@ -30,8 +30,7 @@ jobs:
           path: |
             **/node_modules
           key: node-modules-${{ hashFiles('**/package-lock.json') }}
-      - name: List files in the repository
-        run: |
-          find ${{ github.workspace }} -type f
+      - name: Installe les dépendences
+        run: npm install
       - name: Run les tests
         run: npm run e2e

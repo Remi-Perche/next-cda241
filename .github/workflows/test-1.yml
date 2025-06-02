@@ -22,6 +22,9 @@ jobs:
   Test:
     runs-on: ubuntu-latest
     needs: Build
+    strategy:
+      matrix:
+        navigateur: [chrome, edge, firefox]
     steps:
       - name: Récupère le code du repo
         uses: actions/checkout@v4
@@ -35,6 +38,7 @@ jobs:
       - name: Run les tests (cypress)
         uses: cypress-io/github-action@v6
         with:
+          browser: ${{ matrix.navigateur }}
           install: false
           build: npm run build
           start: npm start

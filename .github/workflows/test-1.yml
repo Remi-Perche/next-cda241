@@ -30,9 +30,16 @@ jobs:
           path: |
             **/node_modules
           key: node-modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Chargement du binary cypress
+        run: npm ci
       - name: Run les tests (cypress)
         uses: cypress-io/github-action@v6
         with:
           install: false
           build: npm run build
           start: npm start
+      - name: Upload Cypress videos
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-videos
+          path: cypress/videos

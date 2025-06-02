@@ -46,6 +46,6 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: cypress-videos
+          name: cypress-videos-${{ matrix.navigateur }}
           path: cypress/videos
           retention-days: 5

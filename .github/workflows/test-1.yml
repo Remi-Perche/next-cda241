@@ -30,7 +30,10 @@ jobs:
           path: |
             **/node_modules
           key: node-modules-${{ hashFiles('**/package-lock.json') }}
-      - name: Installe le binaire de Cypress
-        run: ./packages/core/node_modules/cypress/bin/cypress install
+      - name: Install and Build
+        run: |
+          npm install
+          npm build
+          ./packages/core/node_modules/cypress/bin/cypress install
       - name: Run les tests
         run: npm run e2e

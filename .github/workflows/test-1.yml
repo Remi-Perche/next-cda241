@@ -26,11 +26,6 @@ jobs:
     needs: Build
     steps:
       - run: echo "Début des tests"
-      - name: Run tests
-        run: |
-          mkdir -p test-artifacts
-          echo "Simulated test output" > test-artifacts/test-video.mp4
-          npm test
       - name: Restore node_modules cache
         uses: actions/cache@v4
         with:
@@ -39,6 +34,11 @@ jobs:
           key: node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Installe les dépendences
         run: npm install
+      - name: Run tests
+        run: |
+          mkdir -p test-artifacts
+          echo "Simulated test output" > test-artifacts/test-video.mp4
+          npm test
       - name: Upload la vidéo de test
         uses: actions/upload-artifact@v4
         with:

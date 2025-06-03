@@ -63,6 +63,8 @@ jobs:
           script: |
             cd next-cda241/
             git pull origin main
+            cd /home/ubuntu/.nvm/versions/node/v24.1.0/bin/
+            ls
             npm install
             npm run build
             npm run start

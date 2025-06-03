@@ -49,3 +49,17 @@ jobs:
           name: cypress-videos-${{ matrix.navigateur }}
           path: cypress/videos
           retention-days: 5
+  Deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Connection au SSH
+        run: ssh -i ${{ secrets.SSH_PRIVATE_KEY }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
+      - name: Clone repo
+        run: git clone https://github.com/Remi-Perche/next-cda241.git
+      - name: Build du projet
+        run: |
+          cd next-cda241/
+          npm install
+          npm run build
+      - name: Start du projet
+        run: npm run start

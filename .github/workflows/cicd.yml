@@ -54,15 +54,30 @@ jobs:
   Deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa.pem
+          chmod 600 ~/.ssh/id_rsa.pem
+      - name: Add host to known_hosts
+        run: |
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
       - name: Actions dans le SSH
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            cd next-cda241/
-            git pull origin master
-            /home/ubuntu/.nvm/versions/node/v24.1.0/bin/npm install
-            /home/ubuntu/.nvm/versions/node/v24.1.0/bin/npm run build
-            /home/ubuntu/.nvm/versions/node/v24.1.0/bin/npm run start
+        run: |
+              ssh -i ~/.ssh/id_rsa.pem ubuntu@ec2-98-82-66-77.compute-1.amazonaws.com << EOF
+                  cd next-cda241
+                  git pull
+                  npm install
+                  npm run build
+              EOF
+        # uses: appleboy/ssh-action@v1
+        # with:
+        #   host: ${{ secrets.SSH_HOST }}
+        #   username: ${{ secrets.SSH_USER }}
+        #   key: ${{ secrets.SSH_PRIVATE_KEY }}
+        #   script: |
+        #     cd next-cda241/
+        #     git pull origin master
+        #     /home/ubuntu/.nvm/versions/node/v24.1.0/bin/npm install
+        #     /home/ubuntu/.nvm/versions/node/v24.1.0/bin/npm run build
+        #     /home/ubuntu/.nvm/versions/node/v24.1.0/bin/npm run start

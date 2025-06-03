@@ -62,7 +62,8 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd next-cda241/
-            git pull
+            git pull origin main
+            ls /home/ubuntu/.nvm/versions/node/v24.1.0/bin/
             /home/ubuntu/.nvm/versions/node/v24.1.0/bin/npm install
             /home/ubuntu/.nvm/versions/node/v24.1.0/bin/npm run build
             /home/ubuntu/.nvm/versions/node/v24.1.0/bin/npm run start

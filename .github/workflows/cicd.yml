@@ -1,6 +1,8 @@
 name: CI Next.js
 run-name: Build du projet et dépot sur la prod
-on: [push]
+on:
+  push:
+    branches: [master]
 jobs:
   Build:
     runs-on: ubuntu-latest
@@ -52,14 +54,15 @@ jobs:
   Deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Connection au SSH
-        run: ssh ${{ secrets.SSH_PRIVATE_KEY }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
-      - name: Clone repo
-        run: git clone https://github.com/Remi-Perche/next-cda241.git
-      - name: Build du projet
-        run: |
-          cd next-cda241/
-          npm install
-          npm run build
-      - name: Start du projet
-        run: npm run start
+      - name: Actions dans le SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            git clone https://github.com/Remi-Perche/next-cda241.git
+            cd next-cda241/
+            npm install
+            npm run build
+            npm run start

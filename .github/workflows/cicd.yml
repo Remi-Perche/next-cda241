@@ -1,5 +1,5 @@
 name: CI Next.js
-run-name: Build d'une appli et cache
+run-name: Build du projet et dépot sur la prod
 on: [push]
 jobs:
   Build:
@@ -53,7 +53,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Connection au SSH
-        run: ssh -i ${{ secrets.SSH_PRIVATE_KEY }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
+        run: ssh ${{ secrets.SSH_PRIVATE_KEY }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
       - name: Clone repo
         run: git clone https://github.com/Remi-Perche/next-cda241.git
       - name: Build du projet

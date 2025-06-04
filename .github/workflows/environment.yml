@@ -51,5 +51,5 @@ jobs:
             cd dev/
             echo ${{ secrets.GIT_PAT }} | docker login ghcr.io -u Remi-Perche --password-stdin
             docker pull ghcr.io/remi-perche/next-cda241/next-app:${{github.ref_name}}
-            docker-compose -f docker-compose.yml up -d
+            docker-compose -f docker-compose.dev.yml up -d
           EOF

@@ -1,6 +1,6 @@
 name: CI docker
 run-name: Build du docker sur l'istance et lancement
-on: push
+on: workflow_dispatch
 jobs:
   Deploy:
     runs-on: ubuntu-latest

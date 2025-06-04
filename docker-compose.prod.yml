@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   next-app:
-    image: ghcr.io/rbreham/next-cda241/next-app:latest
+    image: ghcr.io/remi-perche/next-cda241/next-app:latest
     container_name: next-app
     restart: unless-stopped
     ports:

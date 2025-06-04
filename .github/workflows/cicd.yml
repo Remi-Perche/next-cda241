@@ -1,6 +1,6 @@
 name: Deploy
 run-name: Build du projet et dépot sur la prod
-on: push
+on: workflow_dispatch
 jobs:
   Deploy:
     runs-on: ubuntu-latest

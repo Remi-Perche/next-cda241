@@ -2,6 +2,21 @@ name: CI docker
 run-name: Build du docker sur l'istance et lancement
 on: push
 jobs:
+  Deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Actions dans le SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd next-cda241/
+            git pull origin master
+            /home/ubuntu/.nvm/versions/node/v24.1.0/bin/npm install
+            /home/ubuntu/.nvm/versions/node/v24.1.0/bin/npm run build
+            /home/ubuntu/.nvm/versions/node/v24.1.0/bin/npm run start
   Build-docker:
     runs-on: ubuntu-latest
     steps:

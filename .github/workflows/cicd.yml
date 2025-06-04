@@ -1,6 +1,6 @@
 name: CI Next.js
 run-name: Build du projet et dépot sur la prod
-on: release
+on: workflow_dispatch
 jobs:
   # Build:
     # runs-on: ubuntu-latest
@@ -52,22 +52,7 @@ jobs:
   Deploy:
     runs-on: ubuntu-latest
     steps:
-      # - name: Set up SSH key
-      #   run: |
-      #     mkdir -p ~/.ssh
-      #     echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa.pem
-      #     chmod 600 ~/.ssh/id_rsa.pem
-      # - name: Add host to known_hosts
-      #   run: |
-      #     ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
       - name: Actions dans le SSH
-      #   run: |
-      #         ssh -i ~/.ssh/id_rsa.pem ubuntu@ec2-98-82-66-77.compute-1.amazonaws.com << EOF
-      #             cd next-cda241
-      #             git pull
-      #             npm install
-      #             npm run build
-      #         EOF
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.SSH_HOST }}

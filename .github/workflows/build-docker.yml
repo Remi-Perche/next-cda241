@@ -1,0 +1,21 @@
+name: CI docker
+run-name: Build du docker sur l'istance et lancement
+on: push
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mise en fichier de la clé SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa.pem
+          chmod 600 ~/.ssh/id_rsa.pem
+      - name: Ajout de l'instance dans les hôtes connus
+        run: |
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+      - name: Connection SSH avec pull et run de l'image docker
+        run: |
+            ssh -i ~/.ssh/id_rsa.pem ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << EOF
+                docker pull ghcr.io/remi-perche/next-cda241/next-app:latest
+                docker run ghcr.io/remi-perche/next-cda241/next-app
+            EOF

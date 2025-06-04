@@ -1,8 +1,6 @@
 name: CI Next.js
 run-name: Build du projet et dépot sur la prod
-on:
-  push:
-    branches: [master]
+on: release
 jobs:
   # Build:
     # runs-on: ubuntu-latest

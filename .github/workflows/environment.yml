@@ -12,7 +12,7 @@ jobs:
       - name: Création de la nouvelle image
         run: docker build --platform linux/amd64 -t ghcr.io/remi-perche/next-cda241/next-app:${{github.ref_name}} .
       - name: Push de la nouvelle image sur git
-        run: docker push ghcr.io/remi-perche/next-cda241/next-app
+        run: docker push ghcr.io/remi-perche/next-cda241/next-app:${{github.ref_name}}
   deploy-prod:
     needs: Build
     if: github.ref_name == 'master'
@@ -30,7 +30,7 @@ jobs:
           ssh -i ~/.ssh/id_rsa.pem ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << EOF
             cd prod/
             echo ${{ secrets.GIT_PAT }} | docker login ghcr.io -u Remi-Perche --password-stdin
-            docker pull ghcr.io/remi-perche/next-cda241/next-app:latest
+            docker pull ghcr.io/remi-perche/next-cda241/next-app:${{github.ref_name}}
             docker-compose -f docker-compose.prod.yml up -d
           EOF
   deploy-dev:
@@ -50,6 +50,6 @@ jobs:
           ssh -i ~/.ssh/id_rsa.pem ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << EOF
             cd dev/
             echo ${{ secrets.GIT_PAT }} | docker login ghcr.io -u Remi-Perche --password-stdin
-            docker pull ghcr.io/remi-perche/next-cda241/next-app:latest
+            docker pull ghcr.io/remi-perche/next-cda241/next-app:${{github.ref_name}}
             docker-compose -f docker-compose.yml up -d
           EOF

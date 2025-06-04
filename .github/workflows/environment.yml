@@ -10,7 +10,7 @@ jobs:
       - name: Récupère les autorisations git
         run: echo ${{ secrets.GIT_PAT }} | docker login ghcr.io -u Remi-Perche --password-stdin
       - name: Création de la nouvelle image
-        run: docker build --platform linux/amd64 -t ghcr.io/remi-perche/next-cda241/next-app:latest .
+        run: docker build --platform linux/amd64 -t ghcr.io/remi-perche/next-cda241/next-app:${{github.ref_name}} .
       - name: Push de la nouvelle image sur git
         run: docker push ghcr.io/remi-perche/next-cda241/next-app
   deploy-prod:

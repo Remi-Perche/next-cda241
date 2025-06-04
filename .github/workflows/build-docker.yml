@@ -2,7 +2,18 @@ name: CI docker
 run-name: Build du docker sur l'istance et lancement
 on: push
 jobs:
-  Build:
+  Build-docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupère le code du repo
+        uses: actions/checkout@v4
+      - name: Récupère les autorisations git
+        run: echo ${{ secrets.GIT_PAT }} | docker login ghcr.io -u Remi-Perche --password-stdin
+      - name: Création de la nouvelle image
+        run: docker build --platform linux/amd64 -t ghcr.io/remi-perche/next-cda241/next-app:latest .
+      - name: Push de la nouvelle image sur git
+        run: docker push ghcr.io/remi-perche/next-cda241/next-app
+  Deploy-docker:
     runs-on: ubuntu-latest
     steps:
       - name: Mise en fichier de la clé SSH
@@ -16,6 +27,7 @@ jobs:
       - name: Connection SSH avec pull et run de l'image docker
         run: |
             ssh -i ~/.ssh/id_rsa.pem ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << EOF
+                echo ${{ secrets.GIT_PAT }} | docker login ghcr.io -u Remi-Perche --password-stdin
                 docker pull ghcr.io/remi-perche/next-cda241/next-app:latest
                 docker run ghcr.io/remi-perche/next-cda241/next-app
             EOF

@@ -1,0 +1,55 @@
+name: Deploy
+run-name: Mise à jour de l'environment
+on: push
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupère le code du repo
+        uses: actions/checkout@v4
+      - name: Récupère les autorisations git
+        run: echo ${{ secrets.GIT_PAT }} | docker login ghcr.io -u Remi-Perche --password-stdin
+      - name: Création de la nouvelle image
+        run: docker build --platform linux/amd64 -t ghcr.io/remi-perche/next-cda241/next-app:${{github.ref_name}} .
+      - name: Push de la nouvelle image sur git
+        run: docker push ghcr.io/remi-perche/next-cda241/next-app:${{github.ref_name}}
+  deploy-prod:
+    needs: Build
+    if: github.ref_name == 'master'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mise en fichier de la clé SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa.pem
+          chmod 600 ~/.ssh/id_rsa.pem
+      - name: Ajout de l'instance dans les hôtes connus
+        run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+      - name: Connection SSH avec pull et run de l'image docker
+        run: |
+          ssh -i ~/.ssh/id_rsa.pem ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << EOF
+            cd prod/
+            echo ${{ secrets.GIT_PAT }} | docker login ghcr.io -u Remi-Perche --password-stdin
+            docker pull ghcr.io/remi-perche/next-cda241/next-app:${{github.ref_name}}
+            docker-compose -f docker-compose.prod.yml up -d
+          EOF
+  deploy-dev:
+    needs: Build
+    if: github.ref_name == 'develop'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mise en fichier de la clé SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa.pem
+          chmod 600 ~/.ssh/id_rsa.pem
+      - name: Ajout de l'instance dans les hôtes connus
+        run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+      - name: Connection SSH avec pull et run de l'image docker
+        run: |
+          ssh -i ~/.ssh/id_rsa.pem ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << EOF
+            cd dev/
+            echo ${{ secrets.GIT_PAT }} | docker login ghcr.io -u Remi-Perche --password-stdin
+            docker pull ghcr.io/remi-perche/next-cda241/next-app:${{github.ref_name}}
+            docker-compose -f docker-compose.yml up -d
+          EOF

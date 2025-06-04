@@ -1,54 +1,7 @@
-name: CI Next.js
+name: Deploy
 run-name: Build du projet et dépot sur la prod
-on: workflow_dispatch
+on: push
 jobs:
-  # Build:
-    # runs-on: ubuntu-latest
-    # steps:
-    #   - name: Récupère le code du repo
-    #     uses: actions/checkout@v4
-    #   - name: Mets en cache node_modules
-    #     id: cache-node-modules
-    #     uses: actions/cache@v4
-    #     with:
-    #       path: |
-    #         node_modules
-    #         /home/runner/.cache/Cypress
-    #       key: node-modules-${{ hashFiles('**/package-lock.json') }}
-    #   - name: Installe les dépendences
-    #     run: npm install
-    #   - name: Build l'application
-    #     run: npm run build
-  # Test:
-    # runs-on: ubuntu-latest
-    # needs: Build
-    # strategy:
-    #   matrix:
-    #     navigateur: [chrome, edge]
-    # steps:
-    #   - name: Récupère le code du repo
-    #     uses: actions/checkout@v4
-    #   - name: Restore node_modules cache
-    #     uses: actions/cache/restore@v4
-    #     with:
-    #       path: |
-    #         node_modules
-    #         /home/runner/.cache/Cypress
-    #       key: node-modules-${{ hashFiles('**/package-lock.json') }}
-    #   - name: Run les tests (cypress)
-    #     uses: cypress-io/github-action@v6
-    #     with:
-    #       browser: ${{ matrix.navigateur }}
-    #       install: false
-    #       build: npm run build
-    #       start: npm start
-    #   - name: Upload Cypress videos
-    #     if: failure()
-    #     uses: actions/upload-artifact@v4
-    #     with:
-    #       name: cypress-videos-${{ matrix.navigateur }}
-    #       path: cypress/videos
-    #       retention-days: 5
   Deploy:
     runs-on: ubuntu-latest
     steps:

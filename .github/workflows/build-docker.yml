@@ -1,4 +1,4 @@
-name: CI docker
+name: Docker
 run-name: Build du docker sur l'istance et lancement
 on: workflow_dispatch
 jobs:

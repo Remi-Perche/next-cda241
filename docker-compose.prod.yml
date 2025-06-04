@@ -5,10 +5,10 @@ services:
     image: ghcr.io/remi-perche/next-cda241/next-app:latest
     container_name: next-app
     restart: unless-stopped
+    environment:
+      - NODE_ENV=development
     ports:
       - "80:3000"
-    environment:
-      NODE_ENV: production
     # Uncomment if you use .env.production files
     # env_file:
     #   - .env.production

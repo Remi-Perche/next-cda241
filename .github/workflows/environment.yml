@@ -14,6 +14,7 @@ jobs:
       - name: Push de la nouvelle image sur git
         run: docker push ghcr.io/remi-perche/next-cda241/next-app
   deploy-prod:
+    needs: Build
     if: github.ref == 'master'
     runs-on: ubuntu-latest
     steps:
@@ -33,6 +34,7 @@ jobs:
             docker-compose -f docker-compose.prod.yml up -d
           EOF
   deploy-dev:
+    needs: Build
     if: github.ref == 'develop'
     runs-on: ubuntu-latest
     steps:

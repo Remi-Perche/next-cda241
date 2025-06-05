@@ -1,6 +1,10 @@
 name: Deploy
 run-name: Mise à jour de l'environment
-on: push
+on:
+  push:
+    branches:
+      - master
+      - develop
 jobs:
   Build:
     runs-on: ubuntu-latest
@@ -47,9 +51,9 @@ jobs:
         run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
       - name: Connection SSH avec pull et run de l'image docker
         run: |
-          ssh -i ~/.ssh/id_rsa.pem ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << EOF
-            cd dev/
-            echo ${{ secrets.GIT_PAT }} | docker login ghcr.io -u Remi-Perche --password-stdin
-            docker pull ghcr.io/remi-perche/next-cda241/next-app:${{github.ref_name}}
-            docker-compose -f docker-compose.dev.yml up -d
-          EOF
+            ssh -i ~/.ssh/id_rsa.pem ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'bash -s' <<'EOF'
+                cd dev/
+                echo "${{ secrets.GIT_PAT }}" | docker login ghcr.io -u Remi-Perche --password-stdin
+                docker pull ghcr.io/remi-perche/next-cda241/next-app:${{ github.ref_name }}
+                docker-compose -f docker-compose.dev.yml up -d
+            EOF

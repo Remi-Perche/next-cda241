@@ -33,7 +33,7 @@ jobs:
             docker pull ghcr.io/remi-perche/next-cda241/next-app:${{github.ref_name}}
             docker-compose -f docker-compose.prod.yml up -d
           EOF
-  deploy-dev:
+  deploy-dev: 
     needs: Build
     if: github.ref_name == 'develop'
     runs-on: ubuntu-latest

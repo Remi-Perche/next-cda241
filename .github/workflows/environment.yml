@@ -33,8 +33,7 @@ jobs:
         run: |
           ssh -i ~/.ssh/id_rsa.pem ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << EOF
             cd prod/
-            echo ${{ secrets.GIT_PAT }} | docker login ghcr.io -u Remi-Perche --password-stdin
-            docker pull ghcr.io/remi-perche/next-cda241/next-app:${{github.ref_name}}
+            docker-compose -f docker-compose.prod.yml pull
             docker-compose -f docker-compose.prod.yml up -d
           EOF
   deploy-dev: 
@@ -53,7 +52,6 @@ jobs:
         run: |
             ssh -i ~/.ssh/id_rsa.pem ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'bash -s' <<'EOF'
                 cd dev/
-                echo "${{ secrets.GIT_PAT }}" | docker login ghcr.io -u Remi-Perche --password-stdin
-                docker pull ghcr.io/remi-perche/next-cda241/next-app:${{ github.ref_name }}
+                docker-compose -f docker-compose.dev.yml pull
                 docker-compose -f docker-compose.dev.yml up -d
             EOF

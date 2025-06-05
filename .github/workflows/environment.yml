@@ -33,6 +33,8 @@ jobs:
         run: |
           ssh -i ~/.ssh/id_rsa.pem ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << EOF
             cd prod/
+            docker-compose -f docker-compose.prod.yml down
+            docker image prune -f
             docker-compose -f docker-compose.prod.yml pull
             docker-compose -f docker-compose.prod.yml up -d
           EOF
@@ -52,6 +54,8 @@ jobs:
         run: |
             ssh -i ~/.ssh/id_rsa.pem ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'bash -s' <<'EOF'
                 cd dev/
+                docker-compose -f docker-compose.dev.yml down
+                docker image prune -f
                 docker-compose -f docker-compose.dev.yml pull
                 docker-compose -f docker-compose.dev.yml up -d
             EOF
